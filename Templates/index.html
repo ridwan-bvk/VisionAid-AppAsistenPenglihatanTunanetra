@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisionAid - Asisten Penglihatan</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a56d4;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #ffffff, #f1f5f9);
+            color: var(--dark);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+            border: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+        }
+        
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid var(--light-gray);
+            font-weight: 600;
+            padding: 15px 20px;
+            border-radius: 12px 12px 0 0 !important;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.25);
+        }
+        
+        .btn-success {
+            background: var(--success);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(40, 167, 69, 0.25);
+        }
+        
+        .btn-warning {
+            background: var(--warning);
+            color: var(--dark);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-warning:hover {
+            background: #e0a800;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 193, 7, 0.25);
+        }
+        
+        #video-feed {
+            border-radius: 10px;
+            max-width: 100%;
+            background: #000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .detection-item {
+            margin-bottom: 12px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+        }
+        
+        .detection-item:hover {
+            transform: translateX(3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .status-indicator {
+            height: 12px;
+            width: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .status-active {
+            background: var(--success);
+        }
+        
+        .status-inactive {
+            background: var(--danger);
+        }
+        
+        .model-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .model-option {
+            flex: 1;
+            text-align: center;
+            padding: 15px 10px;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid var(--light-gray);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .model-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .model-option.active {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.05);
+            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.15);
+        }
+        
+        .model-option i {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+        
+        .control-section {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .stats-card {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+        
+        .object-tag {
+            display: inline-block;
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin: 3px;
+            font-size: 0.85rem;
+        }
+        
+        .header-logo {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .app-title {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .app-subtitle {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+        
+        .camera-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            background: #000;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: var(--gray);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            opacity: 0.3;
+            margin-bottom: 15px;
+        }
+        
+        @media (max-width: 992px) {
+            .model-option span {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <header class="text-center mb-5">
+            <div class="header-logo">
+                <i class="fas fa-eye"></i>
+            </div>
+            <h1 class="app-title">VisionAid</h1>
+            <p class="app-subtitle">Asisten Penglihatan untuk Tunanetra</p>
+            <div class="d-flex justify-content-center align-items-center mt-3">
+                <div id="status-indicator" class="status-indicator status-active"></div>
+                <span id="status-text" class="fw-medium">Deteksi Aktif</span>
+                <div class="ms-3">
+                    <span id="current-model" class="badge bg-primary">YOLOv8 Nano</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-video me-2"></i>Video Streaming
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="camera-container">
+                            <img id="video-feed" src="{{ url_for('video_feed') }}">
+                            
+                            <!-- Loading Indicator -->
+                            <!-- <div id="camera-loading" class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" 
+                                style="background: rgba(0,0,0,0.5); display: none;">
+                                <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div> -->
+                            
+                            <!-- Error Indicator -->
+                            <!-- <div id="camera-error" class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" 
+                                style="background: rgba(0,0,0,0.7); display: none;">
+                                <div class="text-center text-white p-3">
+                                    <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
+                                    <h5>Kamera Tidak Tersedia</h5>
+                                    <p id="error-message">Gagal mengakses kamera</p>
+                                    <button class="btn btn-light mt-2" onclick="retryCamera()">
+                                        <i class="fas fa-redo me-1"></i>Coba Lagi
+                                    </button>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="col-lg-4"> -->
+                
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-chart-bar me-2"></i>Statistik Deteksi
+                        </div>
+                        <div class="card-body">
+                            <div class="stats-card">
+                                <div class="stat-item">
+                                    <div class="stat-value" id="fps-count">0</div>
+                                    <div class="stat-label">FPS</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="obj-count">0</div>
+                                    <div class="stat-label">Objek</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="model-fps">-</div>
+                                    <div class="stat-label">Kecepatan</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="fas fa-object-group me-2"></i>Objek Terdeteksi
+                            </div>
+                            <span class="badge bg-primary" id="obj-count-badge">0</span>
+                        </div>
+                        <div class="card-body">
+                            <div id="detection-results">
+                                <div class="empty-state">
+                                    <i class="fas fa-search"></i>
+                                    <p>Memindai objek...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-sliders-h me-2"></i>Kendali Aplikasi
+                        </div>
+                        <div class="card-body">
+                            <div class="control-section">
+                                <h5 class="mb-3"><i class="fas fa-microchip me-2"></i>Model Deteksi</h5>
+                                <div class="model-selector">
+                                    <div class="model-option active" data-model="yolov8n" onclick="selectModel(this, 'yolov8n')">
+                                        <i class="fas fa-bolt"></i>
+                                        <span>YOLOv8 Nano</span>
+                                    </div>
+                                    <div class="model-option" data-model="ssd_mobilenet" onclick="selectModel(this, 'ssd_mobilenet')">
+                                        <i class="fas fa-mobile-alt"></i>
+                                        <span>MobileNet-SSD</span>
+                                    </div>
+                                    <div class="model-option" data-model="yolov5n" onclick="selectModel(this, 'yolov5n')">
+                                        <i class="fas fa-rocket"></i>
+                                        <span>YOLOv5 Nano</span>
+                                    </div>
+                                </div>
+                                <div class="mt-2 text-center">
+                                    <small class="text-muted">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        <span id="model-info">Kecepatan tinggi, akurasi baik</span>
+                                    </small>
+                                </div>
+                            </div>
+                            
+                            <div class="control-section">
+                                <h5 class="mb-3"><i class="fas fa-video me-2"></i>Sumber Kamera</h5>
+                                <select id="camera-select" class="form-select mb-2" onchange="toggleCameraInput()">
+                                    <option value="0">Kamera Utama</option>
+                                    <option value="1">Kamera Sekunder</option>
+                                    <option value="ip">IP Kamera (Android)</option>
+                                </select>
+                                <div id="ip-camera-input" class="mt-2" style="display:none;">
+                                    <input type="text" id="camera-url" class="form-control mb-2" 
+                                        placeholder="http://192.168.1.5:8080/video" value="http://">
+                                    <button class="btn btn-sm btn-primary w-100" onclick="updateCameraSource()">
+                                        <i class="fas fa-sync-alt me-1"></i>Terapkan
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="control-section">
+                                <h5 class="mb-3"><i class="fas fa-ruler me-2"></i>Kalibrasi Jarak</h5>
+                                <input type="range" class="form-range mb-3" min="50" max="200" value="100" id="calibration-distance">
+                                <div class="d-flex justify-content-between text-muted">
+                                    <small>50 cm</small>
+                                    <strong id="distance-value">100 cm</strong>
+                                    <small>200 cm</small>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-3">
+                                <button id="toggle-detection" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-power-off me-2"></i>Matikan Deteksi
+                                </button>
+                                <button id="manual-tts" class="btn btn-success btn-lg">
+                                    <i class="fas fa-volume-up me-2"></i>Ulasan Suara
+                                </button>
+                                <button class="btn btn-warning btn-lg" onclick="triggerManualDetection()">
+                                    <i class="fas fa-sync-alt me-2"></i>Deteksi Sekarang
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="fas fa-object-group me-2"></i>Objek Terdeteksi
+                            </div>
+                            <span class="badge bg-primary" id="obj-count-badge">0</span>
+                        </div>
+                        <div class="card-body">
+                            <div id="detection-results">
+                                <div class="empty-state">
+                                    <i class="fas fa-search"></i>
+                                    <p>Memindai objek...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+    <script>
+        const socket = io(window.location.origin, {
+            reconnection: true,
+            reconnectionAttempts: 5,
+            reconnectionDelay: 3000,
+            transports: ['websocket', 'polling']
+        });
+        
+        const detectionResults = document.getElementById('detection-results');
+        const statusIndicator = document.getElementById('status-indicator');
+        const statusText = document.getElementById('status-text');
+        const fpsCount = document.getElementById('fps-count');
+        const objCount = document.getElementById('obj-count');
+        const objCountBadge = document.getElementById('obj-count-badge');
+        const modelInfo = document.getElementById('model-info');
+        const currentModelBadge = document.getElementById('current-model');
+        
+        let lastDetectedObjects = [];
+        let isDetectionActive = true;
+        let frameCount = 0;
+        let fps = 0;
+        let lastTimestamp = Date.now();
+        let lastCameraSource = "0";
+        
+        // Update FPS counter
+        function updateFPS() {
+            const now = Date.now();
+            const delta = now - lastTimestamp;
+            
+            if (delta >= 1000) {
+                fps = Math.round((frameCount * 1000) / delta);
+                fpsCount.textContent = fps;
+                frameCount = 0;
+                lastTimestamp = now;
+            }
+            
+            frameCount++;
+            requestAnimationFrame(updateFPS);
+        }
+        
+        updateFPS();
+        
+        // Model information
+        const modelDetails = {
+            'yolov8n': {
+                name: 'YOLOv8 Nano',
+                speed: '45-60 FPS',
+                info: 'Kecepatan tinggi, akurasi baik',
+                icon: 'fas fa-bolt'
+            },
+            'ssd_mobilenet': {
+                name: 'MobileNet-SSD',
+                speed: '60-80 FPS',
+                info: 'Tercepat untuk perangkat lemah',
+                icon: 'fas fa-mobile-alt'
+            },
+            'yolov5n': {
+                name: 'YOLOv5 Nano',
+                speed: '30-40 FPS',
+                info: 'Kompatibilitas luas',
+                icon: 'fas fa-rocket'
+            }
+        };
+        
+        // Update deteksi objek secara real-time
+        socket.on('detection_update', function(data) {
+            lastDetectedObjects = data.objects;
+            objCount.textContent = data.objects.length;
+            objCountBadge.textContent = data.objects.length;
+            
+            if (data.objects.length > 0) {
+                let html = '';
+                data.objects.forEach(obj => {
+                    const confidence = (obj.confidence * 100).toFixed(1);
+                    const distance = obj.distance ? `${Math.round(obj.distance)} cm` : 'Tidak diketahui';
+                    
+                    html += `<div class="detection-item">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <strong>${obj.label}</strong>
+                            <span class="badge bg-primary">${confidence}%</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-ruler me-2 text-muted"></i>
+                            <span>${distance}</span>
+                        </div>
+                    </div>`;
+                });
+                detectionResults.innerHTML = html;
+            } else {
+                detectionResults.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-times-circle"></i>
+                        <p>Tidak ada objek terdeteksi</p>
+                    </div>`;
+            }
+        });
+        
+        // Tangkap error kamera
+        socket.on('camera_error', function(data) {
+            alert(`Error Kamera: ${data.message}`);
+            statusIndicator.classList.replace('status-active', 'status-inactive');
+            statusText.textContent = 'Error Kamera';
+        });
+        
+        socket.on('connect', () => {
+            console.log('Socket.IO connected');
+            // Refresh video feed on connect
+            document.getElementById('video-feed').src = "{{ url_for('video_feed') }}?t=" + new Date().getTime();
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Socket.IO disconnected');
+            showCameraError("Koneksi ke server terputus");
+        });
+        
+        // Toggle deteksi objek
+        document.getElementById('toggle-detection').addEventListener('click', function() {
+            isDetectionActive = !isDetectionActive;
+            
+            if (isDetectionActive) {
+                this.innerHTML = '<i class="fas fa-power-off me-2"></i>Matikan Deteksi';
+                statusIndicator.classList.replace('status-inactive', 'status-active');
+                statusText.textContent = 'Deteksi Aktif';
+            } else {
+                this.innerHTML = '<i class="fas fa-play me-2"></i>Hidupkan Deteksi';
+                statusIndicator.classList.replace('status-active', 'status-inactive');
+                statusText.textContent = 'Deteksi Nonaktif';
+                detectionResults.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-pause-circle"></i>
+                        <p>Deteksi dimatikan</p>
+                    </div>`;
+            }
+            
+            fetch('/update_settings', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ detection_active: isDetectionActive })
+            });
+        });
+        
+        // Trigger TTS manual
+        document.getElementById('manual-tts').addEventListener('click', function() {
+            if (lastDetectedObjects.length === 0) {
+                fetch('/trigger_tts', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ message: 'Tidak ada objek terdeteksi di depan Anda' })
+                });
+                return;
+            }
+            
+            const mainObj = lastDetectedObjects.reduce((prev, current) => 
+                (prev.confidence > current.confidence) ? prev : current
+            );
+            
+            let message = `Ada ${mainObj.label} di depan Anda`;
+            if (mainObj.distance) {
+                message += ` sekitar ${Math.round(mainObj.distance)} sentimeter`;
+            }
+            
+            fetch('/trigger_tts', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ message: message })
+            });
+        });
+        
+        // Pilih model
+        function selectModel(element, modelName) {
+            // Update UI
+            document.querySelectorAll('.model-option').forEach(opt => {
+                opt.classList.remove('active');
+            });
+            element.classList.add('active');
+            
+            // Update info
+            const model = modelDetails[modelName];
+            modelInfo.textContent = model.info;
+            currentModelBadge.textContent = model.name;
+            
+            // Kirim ke backend
+            fetch('/set_model', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ model_name: modelName })
+            }).then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update stat kecepatan
+                    document.getElementById('model-fps').textContent = model.speed;
+                }
+            });
+        }
+        
+        // Inisialisasi default
+        document.getElementById('camera-url').value = "http://";
+        document.getElementById('model-fps').textContent = modelDetails['yolov8n'].speed;
+        
+        function toggleCameraInput() {
+            const select = document.getElementById('camera-select');
+            const ipInput = document.getElementById('ip-camera-input');
+            ipInput.style.display = select.value === 'ip' ? 'block' : 'none';
+            
+            if (select.value !== 'ip') {
+                updateCameraSource(select.value);
+            }
+        }
+        
+        function updateCameraSource(customSource = null) {
+            const videoFeed = document.getElementById('video-feed');
+            
+            let source;
+            if (customSource !== null) {
+                source = customSource;
+            } else {
+                const cameraSelect = document.getElementById('camera-select');
+                const cameraUrl = document.getElementById('camera-url').value;
+                
+                if (cameraSelect.value === 'ip' && (!cameraUrl || cameraUrl === "http://")) {
+                    alert("Silakan masukkan URL kamera yang valid");
+                    return;
+                }
+                
+                source = cameraSelect.value === 'ip' ? cameraUrl : cameraSelect.value;
+            }
+            
+            lastCameraSource = source;
+            
+            fetch('/update_settings', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ camera_source: source })
+            }).then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Refresh video feed
+                    videoFeed.src = "{{ url_for('video_feed') }}?t=" + new Date().getTime();
+                }
+            }).catch(error => {
+                alert("Gagal mengubah sumber kamera: " + error.message);
+            });
+        }
+
+        // MODIFIKASI FUNGSI retryCamera
+        function retryCamera() {
+            updateCameraSource(lastCameraSource);
+        }
+        
+        // function updateCameraSource(customSource = null) {
+        //     const loadingElement = document.getElementById('camera-loading');
+        //     const errorElement = document.getElementById('camera-error');
+        //     const videoFeed = document.getElementById('video-feed');
+        //     loadingElement.style.display = 'flex';
+        //     errorElement.style.display = 'none';
+
+        //     let source;
+        //     if (customSource !== null) {
+        //         source = customSource;
+        //     } else {
+        //         const cameraSelect = document.getElementById('camera-select');
+        //         const cameraUrl = document.getElementById('camera-url').value;
+                
+        //         if (cameraSelect.value === 'ip' && (!cameraUrl || cameraUrl === "http://")) {
+        //             alert("Silakan masukkan URL kamera yang valid");
+        //             loadingElement.style.display = 'none';
+        //             return;
+        //         }
+                
+        //         source = cameraSelect.value === 'ip' ? cameraUrl : cameraSelect.value;
+        //     }
+            
+        //     // Simpan sumber kamera terakhir
+        //     lastCameraSource = source;
+            
+        //     fetch('/update_settings', {
+        //         method: 'POST',
+        //         headers: {'Content-Type': 'application/json'},
+        //         body: JSON.stringify({ camera_source: source })
+        //     }).then(response => response.json())
+        //     .then(data => {
+        //         if (data.success) {
+        //             // Gunakan cache busting
+        //             const newSrc = "{{ url_for('video_feed') }}?t=" + new Date().getTime();
+                    
+        //             // Atur sumber baru
+        //             videoFeed.src = newSrc;
+                    
+        //             // Periksa apakah video berhasil dimuat
+        //             const checkVideoLoad = () => {
+        //                 // Periksa apakah video memiliki konten
+        //                 if (videoFeed.naturalWidth > 0) {
+        //                     loadingElement.style.display = 'none';
+        //                     statusIndicator.classList.replace('status-inactive', 'status-active');
+        //                     statusText.textContent = 'Deteksi Aktif';
+        //                 } else {
+        //                     // Jika setelah 5 detik belum ada gambar
+        //                     if (Date.now() - startTime > 5000) {
+        //                         loadingElement.style.display = 'none';
+        //                         showCameraError("Kamera tidak merespons");
+        //                     } else {
+        //                         // Cek lagi setelah 200ms
+        //                         setTimeout(checkVideoLoad, 200);
+        //                     }
+        //                 }
+        //             };
+                    
+        //             const startTime = Date.now();
+        //             setTimeout(checkVideoLoad, 500); // Mulai pengecekan setelah 500ms
+        //         }
+        //     }).catch(error => {
+        //         loadingElement.style.display = 'none';
+        //         showCameraError("Gagal terhubung ke server");
+        //     });
+        // }
+
+        // Fungsi untuk memeriksa status kamera secara berkala
+       // Ganti fungsi monitorCameraStatus dengan ini
+    function monitorCameraStatus() {
+        fetch('/camera_status')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.active) {
+                    document.getElementById('camera-error').style.display = 'none';
+                } else {
+                    let errorMsg = "Kamera tidak aktif";
+                    if (data.error) {
+                        errorMsg += `: ${data.error}`;
+                    }
+                    showCameraError(errorMsg);
+                }
+            })
+            .catch(error => {
+                console.error('Error checking camera status:', error);
+                // Tidak menampilkan error di sini untuk menghindari loop
+            });
+    }
+
+// Panggil fungsi ini sekali saat inisialisasi
+monitorCameraStatus();
+
+// Interval tetap 3 detik
+// setInterval(monitorCameraStatus, 3000);
+
+        // Mulai monitoring setiap 3 detik
+        // setInterval(monitorCameraStatus, 3000);
+        
+        function showCameraError(message) {
+            const errorElement = document.getElementById('camera-error');
+            document.getElementById('error-message').textContent = message;
+            errorElement.style.display = 'flex';
+        }
+        
+        function retryCamera() {
+            document.getElementById('camera-error').style.display = 'none';
+            updateCameraSource(lastCameraSource);
+        }
+
+        // Manual detection trigger
+        function triggerManualDetection() {
+            if (!isDetectionActive) {
+                document.getElementById('toggle-detection').click();
+            }
+            
+            fetch('/trigger_tts', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ message: 'Memulai deteksi objek' })
+            });
+        }
+        
+        // Kalibrasi jarak
+        document.getElementById('calibration-distance').addEventListener('input', function() {
+            document.getElementById('distance-value').textContent = `${this.value} cm`;
+        });
+    </script>
+</body>
+</html>

@@ -1,100 +1,181 @@
-# VisionAid-AppAsistenPenglihatanTunanetra
+Berikut adalah versi yang telah dirapikan dan didesain ulang dari file `.txt` kamu, siap untuk digunakan sebagai `README.md` di GitHub. Format ini langsung bisa di-*copy-paste* ke halaman GitHub:
 
-Aplikasi dari computer vision yang dikembangkan untuk membantu tunanetra
+---
 
-
-
-VisionAid adalah sistem asisten penglihatan berbasis AI yang membantu penyandang tunanetra dalam navigasi sehari-hari dengan mendeteksi objek sekitar dan memberikan umpan balik suara secara real-time.
+# 🎯 VisionAid - Asisten Penglihatan Berbasis AI untuk Tunanetra
 
 
 
-##### 🌟 Fitur Utama
+> *Antarmuka VisionAid yang intuitif dan mudah digunakan*
 
-* Deteksi Objek Real-time
+**VisionAid** adalah sistem asisten penglihatan berbasis AI yang membantu penyandang tunanetra dalam navigasi sehari-hari. Sistem ini mendeteksi objek sekitar dan memberikan umpan balik suara secara real-time, mendukung kemandirian dan mobilitas pengguna.
 
-Mengenali 80+ objek sehari-hari menggunakan model YOLO/MobileNet
+---
 
+## 🌟 Fitur Utama
 
+* 🔍 **Deteksi Objek Real-time**
+  Mengenali lebih dari 80 objek sehari-hari menggunakan model **YOLO** atau **MobileNet-SSD**.
 
-* Estimasi Jarak
+* 📏 **Estimasi Jarak**
+  Menghitung jarak objek dengan teknik **monocular geometry**.
 
-Menghitung jarak objek dengan teknik geometri monocular
+* 🔊 **Umpan Balik Suara**
+  Mengubah hasil deteksi menjadi panduan audio dalam **Bahasa Indonesia**.
 
+* 📷 **Multi-sumber Kamera**
+  Mendukung kamera USB, IP camera, dan kamera smartphone.
 
+* 💻 **Antarmuka Responsif**
+  Desain web yang mudah diakses dengan feedback visual yang jelas.
 
-* Umpan Balik Suara
+---
 
-Konversi hasil deteksi ke panduan audio dalam bahasa Indonesia
+## 🛠 Teknologi yang Digunakan
 
-
-
-* Multi-sumber Kamera
-
-Dukungan kamera USB, IP kamera, dan smartphone
-
-
-
-* Antarmuka Responsif
-
-Desain web yang mudah diakses dengan feedback visual jelas
-
-##### 
-
-##### 🛠 Teknologi
-
-1. Backend
+**Backend:**
 
 * Python 3.8+
 * Flask (Web Framework)
 * OpenCV (Computer Vision)
 * PyTorch (Deep Learning)
 * Ultralytics YOLOv8 (Object Detection)
-* pyttsx3 (Text-to-Speech)
+* `pyttsx3` (Text-to-Speech)
 
+**Frontend:**
 
-
-**2. Frontend**
-
-* Bootstrap 5 (UI Components)
-* Socket.IO (Real-time Communication)
+* Bootstrap 5
+* Socket.IO
 * Vanilla JavaScript
 
+---
 
 
-##### Langkah-langkah
+## 🚀 Cara Instalasi & Menjalankan Aplikasi
 
-* ###### Clone repository
+### 📌 Prasyarat
 
-git clone https://github.com/username/VisionAid.git
+* Python 3.8+
+* Git
+* Kamera eksternal / webcam
 
-cd VisionAid
+### 🔧 Langkah-langkah
 
-* ###### Buat environment virtual (disarankan)
+1. **Clone Repository**
 
-python -m venv venv
+   ```bash
+   git clone https://github.com/username/VisionAid.git
+   cd VisionAid
+   ```
 
-source venv/bin/activate  # Linux/Mac
+2. **Buat Virtual Environment**
 
-venv\\Scripts\\activate    # Windows
+   ```bash
+   python -m venv venv
+   source venv/bin/activate      # Linux / Mac
+   venv\Scripts\activate         # Windows
+   ```
 
-* ###### Instal dependensi
+3. **Instalasi Dependensi**
 
-pip install -r requirements.txt
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-* ###### Unduh model AI
+4. **Unduh Model AI**
 
-python download\_models.py
+   ```bash
+   python download_models.py
+   ```
 
-* ###### Jalankan aplikasi
+5. **Jalankan Aplikasi**
 
-python app.py
+   ```bash
+   python app.py
+   ```
 
+6. **Buka di Browser**
 
+   ```
+   http://localhost:5000
+   ```
 
+---
 
+## 🗂 Struktur Direktori
 
-##### Model  yang Didukung
+```
+VisionAid/
+├── app.py                  # Aplikasi utama
+├── models/                 # Model terlatih
+├── static/
+│   └── known_widths.json   # Lebar objek yang diketahui
+├── templates/
+│   └── index.html          # Antarmuka utama
+├── requirements.txt        # Daftar dependensi
+├── download_models.py      # Skrip unduhan model
+└── README.md
+```
 
-* YOLOv8 Nano - Akurasi tinggi (65.2% mAP)
-* MobileNet-SSD - Kecepatan optimal (78 FPS)
-* YOLOv5 Nano - Kompatibilitas luas
+---
+
+## 🧠 Model AI yang Didukung
+
+* **YOLOv8 Nano** — Akurasi tinggi (65.2% mAP)
+* **MobileNet-SSD** — Kecepatan optimal (78 FPS)
+* **YOLOv5 Nano** — Kompatibilitas luas
+
+---
+
+## 🤝 Kontribusi
+
+Kami sangat terbuka terhadap kontribusi dari komunitas. Cara berkontribusi:
+
+1. Fork repository ini.
+2. Buat branch fitur baru:
+
+   ```bash
+   git checkout -b fitur-baru
+   ```
+3. Commit perubahan:
+
+   ```bash
+   git commit -am 'Tambahkan fitur baru'
+   ```
+4. Push ke branch:
+
+   ```bash
+   git push origin fitur-baru
+   ```
+5. Buat **Pull Request**.
+
+### 🎯 Area Pengembangan Prioritas
+
+* Optimasi untuk perangkat mobile
+* Penambahan bahasa daerah
+* Integrasi sensor tambahan (IMU/LiDAR)
+* Peningkatan akurasi pada kondisi cahaya rendah
+
+---
+
+## 📜 Lisensi
+
+Proyek ini dilisensikan di bawah **MIT License** — bebas digunakan untuk tujuan **edukasi, penelitian, dan komersial**.
+
+---
+
+## ✉️ Kontak Tim Pengembang
+
+* **Asep Ridwan** 
+* **Ilyas W** 
+* **Riski S**
+* * **Surya** 
+
+---
+
+> “Teknologi harus memberdayakan, bukan memperlebar kesenjangan.”
+> — *Tim VisionAid*
+
+---
+
+Jika kamu ingin, saya juga bisa bantu ubah ini menjadi file `README.md` siap pakai. Mau?
